@@ -1,0 +1,42 @@
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+
+# Pythonのインストール
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.10 \
+    python3-pip \
+    git \
+    wget \
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender1 \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# pipをアップグレード
+RUN pip3 install --upgrade pip
+
+# 作業ディレクトリの設定
+WORKDIR /app
+
+# PyTorch (CUDA対応版) とその他のパッケージをインストール
+RUN pip3 install --no-cache-dir \
+    torch torchvision --index-url https://download.pytorch.org/whl/cu118
+
+# TotalSegmentatorとその他のパッケージをインストール
+RUN pip3 install --no-cache-dir \
+    TotalSegmentator \
+    pydicom \
+    SimpleITK \
+    numpy \
+    pynrrd
+
+# 入力・出力ディレクトリの作成
+RUN mkdir -p /input /output
+
+# スクリプトをコピー
+COPY segmentation.py /app/
+
+# エントリーポイント
+ENTRYPOINT ["python3", "/app/segmentation.py"]

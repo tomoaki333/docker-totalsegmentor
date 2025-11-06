@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  totalsegmentor:
+    build: .
+    container_name: totalsegmentor
+    volumes:
+      # 入力DICOMディレクトリをマウント（実行時に指定）
+      - ${INPUT_DIR}:/input:ro
+      # 出力ディレクトリをマウント
+      - E:\docker-totalsegmentor\output_segmentation:/output
+    command: /input /output
+    environment:
+      - PYTHONUNBUFFERED=1

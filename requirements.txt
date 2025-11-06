@@ -1,0 +1,5 @@
+TotalSegmentator>=2.0.0
+pydicom>=2.3.0
+SimpleITK>=2.2.0
+numpy>=1.21.0
+pynrrd>=1.0.0
